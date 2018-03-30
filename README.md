@@ -98,4 +98,13 @@ cls.predict(data_dict)
 For questions regarding versions 3.00 and 2.00, please email bsm9339@rit.edu (Benjamin Meyers) or nm6061@rit.edu (Nuthan Munaiah). Please direct questions regarding the port from Python2 to Python3 to Benjamin Meyers.
 
 For questions regarding the implementation and the theory behind the politeness classifier, please email cristian@cs.cornell.edu (Cristian Danescu-Niculescu-Mizil) or sudhof@stanford.edu (Moritz Sudhof).
+
 # new-politeness
+In order to properly run the program, you need to run a version of StanfordCoreNLP server, and link the ports, which has instructions in the previous part of the readme.
+The default port is 9000. Then in order to run the program, run
+``` bash
+python3 app.py
+```
+And then you will be prompted to open the form with a url, and you should be able to input the sentence / request there.
+The in-depth results will be displayed in the terminal, along with part of the values from the process. This is being
+adapted to work on the webpage, with a cleaner display.
