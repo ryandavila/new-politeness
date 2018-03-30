@@ -1,0 +1,158 @@
+<html>
+  <head>
+    <title>Politeness</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+    <script src="http://f.cl.ly/items/3Z282N1s1m0b3k2Y1S3p/spin.js"></script>
+    <script src="http://f.cl.ly/items/042a1F3f1S113L0H1X2O/ladda.js"></script>
+
+    <style>
+      .white-bg { background: #ffffff !important; }
+      .label { padding: 5px !important;}
+
+
+    </style>
+
+  </head>
+  <body>
+    
+
+
+    <div class="container">
+      <br />
+      <div class="row">
+        <h1>Would you mind checking out <br /> this politeness model we built?</h1>
+        <h4>Our model automatically measures the politeness of requests. <br />
+          Try it below, and read more about our work <a href="http://www.mpi-sws.org/~cristian/Politeness.html">here</a>.</h4>
+        <br />
+      </div>
+
+      <div class="row">
+        <div class="jumbotron">
+              <form class="form-horizontal" id="inputform" role="form" action="/score-politeness" method="post">
+                <div class="form-group">
+                  <label for="textinput">Try the model here</label>
+                    <textarea class="form-control" id="textinput" name="text" rows="5" placeholder="Enter a request..."></textarea>
+                </div>
+
+              <div class="form-group">
+                <a href="#" id="form-submit" class="btn btn-primary ladda-button" data-style="zoom-out" data-size="l"><span class="ladda-label">Score for Politeness</span></a>  
+              </div>
+              </form>
+
+              <div id="result-box" class="row">
+                <div class="well well-kg white-bg">
+                    <p id="scored-txt"></p>
+                    <div>
+                      <big><span id="label" class="label text-capitalize">polite</span></big> &nbsp;
+                      <big><span id="confidence" class="label label-info">Confidence: 0.0</span></big>
+                    </div>
+                </div>
+              </div>
+
+        </div>
+      </div>
+
+    <div class="row">
+      <h3>Sample Requests</h3>
+    </div>
+
+    <div class="row">
+      <div class="well well-kg">
+          <p>Thank you for the response. Would you be willing to add a few more details to explain further?</p>
+          <div>
+            <span class="label label-success text-capitalize"><big>polite</big></span> &nbsp;
+            <span class="label label-info"><big>Algorithm's Confidence: 0.97</big></span>
+          </div>
+      </div>
+    </div>   
+    <div class="row">
+      <div class="well well-kg">
+          <p>That's the only answer you have? seriously? can't you do better?</p>
+          <div>
+            <span class="label label-danger text-capitalize"><big>impolite</big></span> &nbsp;
+            <span class="label label-info"><big>Algorithm's Confidence: 0.79</big></span>
+          </div>
+      </div>   
+    </div>   
+    <div class="row">
+      <div class="well well-kg">
+          <p>How many times do i have to revert you before you stop? do you want to get blocked?</p>
+          <div>
+            <span class="label label-danger text-capitalize"><big>impolite</big></span> &nbsp;
+            <span class="label label-info"><big>Algorithm's Confidence: 0.72</big></span>
+          </div>
+      </div>    
+    </div>   
+    <div class="row">
+      <div class="well well-kg">
+          <p>Splendid work so far! do you have a copy of that reference or should I just use the library's?</p>
+          <div>
+            <big><span class="label label-success text-capitalize">polite</span></big> &nbsp;
+            <span class="label label-info"><big>Algorithm's Confidence: 0.73</big></span>
+          </div>
+      </div>
+    </div>   
+
+
+
+      <p class="text-right"><small>
+        Cristian Danescu-Niculescu-Mizil &nbsp; &bull; &nbsp; 
+        Moritz Sudhof &nbsp; &bull; &nbsp;
+        Dan Jurafsky &nbsp; &bull; &nbsp;
+        Jure Leskovec &nbsp; &bull; &nbsp;
+        Christopher Potts</small> &nbsp;
+      </p>
+
+  </div>
+
+  <script>
+
+    $(document).ready(function() {
+
+      $("#result-box").hide();
+      
+      $("#form-submit").click(function(e) {
+        e.preventDefault();
+        var l = Ladda.create(this);
+        l.start();
+        var form_data = $("#inputform").serialize();
+        console.log(form_data);
+        $.ajax({
+          type: "POST",
+          url: "/score-politeness",
+          data: form_data,
+          success: function(data) {
+
+            var labelclass = "label-success";
+            if (data.label == "neutral") {
+              labelclass = "label-warning";
+            } else if (data.label == "impolite") {
+              labelclass = "label-danger";
+            }
+            $("#label").removeClass("label-success label-warning label-danger").addClass(labelclass);
+            $("#label").html(data.label);
+            if (data.label == "neutral") {
+              $("#confidence").html("");
+            } else {
+              $("#confidence").html("Algorithm's Confidence: ".concat(data.confidence));
+            }
+            $("#scored-txt").html(data.text);
+
+            $("#result-box").slideDown();
+
+          }
+        }).always(function() { l.stop(); });
+      });
+    });
+
+  </script>
+
+  </body>
+</html>
+
+
+  
