@@ -61,8 +61,8 @@ def score_text():
     #print(parses)
     smolParse1 = parses[0]
     print (smolParse1) #prints information for sentence one
-    smolParse2 = parses[1]
-    print (smolParse2) #prints information for sentence two, probably
+    # smolParse2 = parses[1]
+    # print (smolParse2) #prints information for sentence two, probably
     politeProb = float(doc[0])
     impoliteProb = float(doc[1])
     print(politeProb)
