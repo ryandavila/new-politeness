@@ -3,6 +3,7 @@ import os
 import math
 from flask import Flask
 from flask import render_template, request, jsonify
+import json
 
 
 import politeness
@@ -55,10 +56,10 @@ def score_text():
     endIndex = len(probs) - 1
     print(text)
     predictionSeg = probs[endIndex]
-    print(predictionSeg)
+    # print(predictionSeg)
     doc = predictionSeg["document"]
-    #print(doc) #prints everything
     parses = predictionSeg["parses"]
+
 
     stratDict = (ps.sentCheck(text))
     #print(parses)
@@ -66,6 +67,14 @@ def score_text():
     print (smolParse1) #prints information for sentence one
     # smolParse2 = parses[1]
     # print (smolParse2) #prints information for sentence two, probably
+
+    fullParse = parses[0]
+    parsing = fullParse["parses"]
+    # print (parsing) #prints information
+    formattedParse = str(parsing)
+    formattedParse = formattedParse.replace("),", ") , ")
+
+
     politeProb = float(doc[0])
     impoliteProb = float(doc[1])
     print(politeProb)
@@ -84,7 +93,7 @@ def score_text():
     confidence = "%.2f" % confidence
 
     # Return JSON:
-    return jsonify(text=text, label=l, confidence=confidence, strategies=stratDict)
+    return jsonify(text=text, label=l, confidence=confidence, parsing=formattedParse, strategies=json.dumps(stratDict))
 
 
 if __name__ == "__main__":

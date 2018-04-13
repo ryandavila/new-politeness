@@ -12,13 +12,13 @@
     <style>
       .white-bg { background: #ffffff !important; }
       .label { padding: 5px !important;}
-
+      /* #parse {width: 620px; color: black;} */
 
     </style>
 
   </head>
   <body>
-    
+
 
 
     <div class="container">
@@ -39,7 +39,7 @@
                 </div>
 
               <div class="form-group">
-                <a href="#" id="form-submit" class="btn btn-primary ladda-button" data-style="zoom-out" data-size="l"><span class="ladda-label">Score for Politeness</span></a>  
+                <a href="#" id="form-submit" class="btn btn-primary ladda-button" data-style="zoom-out" data-size="l"><span class="ladda-label">Score for Politeness</span></a>
               </div>
               </form>
 
@@ -48,7 +48,9 @@
                     <p id="scored-txt"></p>
                     <div>
                       <big><span id="label" class="label text-capitalize">polite</span></big> &nbsp;
-                      <big><span id="confidence" class="label label-info">Confidence: 0.0</span></big>
+                      <big><span id="confidence" class="label label-info">Confidence: 0.0</span></big><br><br>
+                      <span id="parse" class="label label-info">Parse Info: </span>
+                      <span id="strategies" class="label label-info">Strategies</span>
                     </div>
                 </div>
               </div>
@@ -68,7 +70,7 @@
             <span class="label label-info"><big>Algorithm's Confidence: 0.97</big></span>
           </div>
       </div>
-    </div>   
+    </div>
     <div class="row">
       <div class="well well-kg">
           <p>That's the only answer you have? seriously? can't you do better?</p>
@@ -76,8 +78,8 @@
             <span class="label label-danger text-capitalize"><big>impolite</big></span> &nbsp;
             <span class="label label-info"><big>Algorithm's Confidence: 0.79</big></span>
           </div>
-      </div>   
-    </div>   
+      </div>
+    </div>
     <div class="row">
       <div class="well well-kg">
           <p>How many times do i have to revert you before you stop? do you want to get blocked?</p>
@@ -85,8 +87,8 @@
             <span class="label label-danger text-capitalize"><big>impolite</big></span> &nbsp;
             <span class="label label-info"><big>Algorithm's Confidence: 0.72</big></span>
           </div>
-      </div>    
-    </div>   
+      </div>
+    </div>
     <div class="row">
       <div class="well well-kg">
           <p>Splendid work so far! do you have a copy of that reference or should I just use the library's?</p>
@@ -95,12 +97,12 @@
             <span class="label label-info"><big>Algorithm's Confidence: 0.73</big></span>
           </div>
       </div>
-    </div>   
+    </div>
 
 
 
       <p class="text-right"><small>
-        Cristian Danescu-Niculescu-Mizil &nbsp; &bull; &nbsp; 
+        Cristian Danescu-Niculescu-Mizil &nbsp; &bull; &nbsp;
         Moritz Sudhof &nbsp; &bull; &nbsp;
         Dan Jurafsky &nbsp; &bull; &nbsp;
         Jure Leskovec &nbsp; &bull; &nbsp;
@@ -114,7 +116,7 @@
     $(document).ready(function() {
 
       $("#result-box").hide();
-      
+
       $("#form-submit").click(function(e) {
         e.preventDefault();
         var l = Ladda.create(this);
@@ -137,13 +139,16 @@
             $("#label").html(data.label);
             if (data.label == "neutral") {
               $("#confidence").html("");
+              $("#parse").html("Parsing Info: ".concat(data.parsing));
             } else {
               $("#confidence").html("Algorithm's Confidence: ".concat(data.confidence));
             }
             $("#scored-txt").html(data.text);
 
+            $("#parse").html("Parsing Info: ".concat(data.parsing));
+            console.log(data.parsing);
+            $("#strategies").html("Strategy Info: ".concat(data.strategies));
             $("#result-box").slideDown();
-
           }
         }).always(function() { l.stop(); });
       });
@@ -153,6 +158,3 @@
 
   </body>
 </html>
-
-
-  
