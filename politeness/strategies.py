@@ -65,6 +65,7 @@ getdeptag = lambda p: p.split("(")[0]
 ####    Based on dependency-parses.
 please = lambda p: len(set([getleft(p), getright(p)]).intersection(["please"])) > 0 and 1 not in [getleftpos(p), getrightpos(p)]
 please.__name__ = "Please"
+newplease = ["please"]
 
 pleasestart = lambda p: (getleftpos(p) == 1 and getleft(p) == "please") or (getrightpos(p) == 1 and getright(p) == "please")
 pleasestart.__name__ = "Please start"
@@ -74,36 +75,46 @@ hashedges.__name__ = "Hedges"
 
 deference = lambda p: (getleftpos(p) == 1 and getleft(p) in ["great","good","nice","good","interesting","cool","excellent","awesome"]) or (getrightpos(p) == 1 and getright(p) in ["great","good","nice","good","interesting","cool","excellent","awesome"])
 deference.__name__ = "Deference"
+newdeference = ["great","good","nice","good","interesting","cool","excellent","awesome"]
 
 gratitude = lambda p: getleft(p).startswith("thank") or getright(p).startswith("thank") or "(appreciate, i)" in remove_numbers(p).lower()
 gratitude.__name__ = "Gratitude"
+newgratitude = ["thank", "appreciate"] #find a way to include I?
 
 apologize = lambda p: getleft(p) in ("sorry","woops","oops") or getright(p) in ("sorry","woops","oops") or remove_numbers(p).lower() in ("dobj(excuse, me)", "nsubj(apologize, i)", "dobj(forgive, me)")
 apologize.__name__ = "Apologizing"
+newapologize = ["sorry","woops","oops"]
 
 groupidentity = lambda p: len(set([getleft(p), getright(p)]).intersection(["we", "our", "us", "ourselves"])) > 0
 groupidentity.__name__ = "1st person pl."
+newgroupIdentity = ["we", "our", "us", "ourselves"]
 
 firstperson = lambda p: 1 not in [getleftpos(p), getrightpos(p)] and len(set([getleft(p), getright(p)]).intersection(["i", "my", "mine", "myself"])) > 0
 firstperson.__name__ = "1st person"
+newfirstPerson = ["i", "my", "mine", "myself"]
 
 secondperson_start = lambda p: (getleftpos(p) == 1 and getleft(p) in ("you","your","yours","yourself")) or (getrightpos(p) == 1 and getright(p) in ("you","your","yours","yourself"))
 secondperson_start.__name__ = "2nd person start"
+newsecondPerson = ["you","your","yours","yourself"]
 
 firstperson_start = lambda p: (getleftpos(p) == 1 and getleft(p) in ("i","my","mine","myself")) or (getrightpos(p) == 1 and getright(p) in ("i","my","mine","myself"))
 firstperson_start.__name__ = "1st person start"
 
 hello = lambda p: (getleftpos(p) == 1 and getleft(p) in ("hi","hello","hey")) or (getrightpos(p) == 1 and getright(p) in ("hi","hello","hey"))
 hello.__name__ = "Indirect (greeting)"
+newgreeting = ["hi","hello","hey"]
 
 really = lambda p: (getright(p) == "fact" and getdeptag(p) == "prep_in") or remove_numbers(p) in ("det(point, the)","det(reality, the)","det(truth, the)") or len(set([getleft(p), getright(p)]).intersection(["really", "actually", "honestly", "surely"])) > 0
 really.__name__ = "Factuality"
+newfactuality = ["really", "actually", "honestly", "surely", "truely"]
 
 why = lambda p: (getleftpos(p) in (1,2) and getleft(p) in ("what","why","who","how")) or (getrightpos(p) in (1,2) and getright(p) in ("what","why","who","how"))
 why.__name__ = "Direct question"
+newwhy = ["what","why","who","how"]
 
 conj = lambda p: (getleftpos(p) == 1 and getleft(p) in ("so","then","and","but","or")) or (getrightpos(p) == 1 and getright(p) in ("so","then","and","but","or"))
 conj.__name__ = "Direct start"
+newconj = ["so","then","and","but","or"]
 
 btw = lambda p: getdeptag(p) == "prep_by" and getright(p) == "way" and getrightpos(p) == 3
 btw.__name__ = "Indirect (btw)"
@@ -128,9 +139,11 @@ aux_polar.__name__ = "Aux Polar"
 ####    Verb moods.
 subjunctive = lambda s: "could you" in s or "would you" in s
 subjunctive.__name__ = "SUBJUNCTIVE"
+newsubjunctive = ["could you", "would you"]
 
 indicative = lambda s: "can you" in s or "will you" in s
 indicative.__name__ = "INDICATIVE"
+newindicative = ["can you", "will you"]
 
 ####    Based on token lists.
 has_hedge = lambda l: len(set(l).intersection(hedges)) > 0
@@ -231,3 +244,27 @@ def get_politeness_strategy_features(document):
 
     return features
 
+textStrategies = {'hedges':hedges, 'please':newplease, 'deference':newdeference, 'gratitude':newgratitude, 'apologize':newapologize, 'group identity':newgroupIdentity,
+'first person':newfirstPerson, 'second person':newsecondPerson, 'greeting':newgreeting, 'factuality':newfactuality, 'why':newwhy, 'conj':newconj, 'polar set':polar_set,
+'subjunctive':newsubjunctive, 'indicative':newindicative}
+
+def findWholeWord(w):
+    return re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
+
+
+print (textStrategies)
+
+def sentCheck(sent):
+    tracker = {}
+    for key, val in textStrategies.items():
+        for v in val:
+            if not(findWholeWord(v)(sent) == None):
+                tracker[v]=key
+                print ("memes")
+                print (tracker) #probably going to overwrite the value
+    return tracker
+
+# print (sentCheck("do you even know what is happening?"))
+
+# print (findWholeWord('seek')('those who seek shall find'))
+# print (findWholeWord('word')('swordsmith'))

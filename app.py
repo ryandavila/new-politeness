@@ -8,6 +8,7 @@ from flask import render_template, request, jsonify
 import politeness
 from politeness.classifier import Classifier
 from politeness.helpers import set_corenlp_url
+import politeness.strategies as ps
 set_corenlp_url('http://localhost:9000')
 
 cls = Classifier()
@@ -54,10 +55,12 @@ def score_text():
     endIndex = len(probs) - 1
     print(text)
     predictionSeg = probs[endIndex]
-    #print(predictionSeg)
+    print(predictionSeg)
     doc = predictionSeg["document"]
     #print(doc) #prints everything
     parses = predictionSeg["parses"]
+
+    stratDict = (ps.sentCheck(text))
     #print(parses)
     smolParse1 = parses[0]
     print (smolParse1) #prints information for sentence one
@@ -81,7 +84,7 @@ def score_text():
     confidence = "%.2f" % confidence
 
     # Return JSON:
-    return jsonify(text=text, label=l, confidence=confidence)
+    return jsonify(text=text, label=l, confidence=confidence, strategies=stratDict)
 
 
 if __name__ == "__main__":
