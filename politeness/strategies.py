@@ -246,7 +246,7 @@ def get_politeness_strategy_features(document):
 
 textStrategies = {'hedges':hedges, 'please':newplease, 'deference':newdeference, 'gratitude':newgratitude, 'apologize':newapologize, 'group identity':newgroupIdentity,
 'first person':newfirstPerson, 'second person':newsecondPerson, 'greeting':newgreeting, 'factuality':newfactuality, 'why':newwhy, 'conj':newconj, 'polar set':polar_set,
-'subjunctive':newsubjunctive, 'indicative':newindicative}
+'subjunctive':newsubjunctive, 'indicative':newindicative, 'positive words':positive_words, 'negative words':negative_words}
 
 def findWholeWord(w):
     return re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
@@ -258,7 +258,9 @@ def sentCheck(sent):
     tracker = {}
     for key, val in textStrategies.items():
         for v in val:
+            print (v)
             if not(findWholeWord(v)(sent) == None):
+                print (v)
                 tracker[v]=key
                 print ("memes")
                 print (tracker) #probably going to overwrite the value
@@ -266,5 +268,5 @@ def sentCheck(sent):
 
 # print (sentCheck("do you even know what is happening?"))
 
-# print (findWholeWord('seek')('those who seek shall find'))
+# print (findWholeWord('jaw-dropping')('those jaw-dropping seek shall find'))
 # print (findWholeWord('word')('swordsmith'))
