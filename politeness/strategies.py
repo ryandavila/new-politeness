@@ -206,11 +206,9 @@ def get_politeness_strategy_features(document):
                       ],
             "unigrams": ["a", "b", "c", ...]
         }
-
     Return a binary feature dict of the following form, where the value for each
     feature is a binary value (1 or 0):
         { "feature_1": 1, "feature_2": 0, "feature_3": 1, ... }
-
     This currently only returns binary features; a value of 1 indicates the the
     strategy is present in the document (0 indicates not present). You could
     modify this code to count the number occurrences of each strategy (if you
@@ -248,25 +246,32 @@ textStrategies = {'hedges':hedges, 'please':newplease, 'deference':newdeference,
 'first person':newfirstPerson, 'second person':newsecondPerson, 'greeting':newgreeting, 'factuality':newfactuality, 'why':newwhy, 'conj':newconj, 'polar set':polar_set,
 'subjunctive':newsubjunctive, 'indicative':newindicative, 'positive words':positive_words, 'negative words':negative_words}
 
-def findWholeWord(w):
-    return re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
 
 
-print (textStrategies)
+def findWholeWord(w, string):
+    pattern = re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE)
+    if pattern.search(string):
+        return True
+    else:
+        return False
+
+
+# print (textStrategies)
 
 def sentCheck(sent):
     tracker = {}
     for key, val in textStrategies.items():
         for v in val:
-            print (v)
-            if not(findWholeWord(v)(sent) == None):
-                print (v)
+            # print (v)
+            # print (key)
+            if (findWholeWord(v, sent)):
+                # print (v)
                 tracker[v]=key
-                print ("memes")
-                print (tracker) #probably going to overwrite the value
+                # print ("memes")
+                # print (tracker) #probably going to overwrite the value
     return tracker
 
-# print (sentCheck("do you even know what is happening?"))
-
-# print (findWholeWord('jaw-dropping')('those jaw-dropping seek shall find'))
-# print (findWholeWord('word')('swordsmith'))
+# print (sentCheck('What the fuck is wrong with this code?'))
+#
+# print (findWholeWord('jaw-dropping', 'those jaw-dropping seek shall find'))
+# print (findWholeWord('word', 'swordsmith'))

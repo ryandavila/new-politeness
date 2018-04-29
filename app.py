@@ -63,8 +63,8 @@ def score_text():
 
     stratDict = (ps.sentCheck(text))
     #print(parses)
-    smolParse1 = parses[0]
-    print (smolParse1) #prints information for sentence one
+    initialParse = parses[0]
+    # print (initialParse)
     # smolParse2 = parses[1]
     # print (smolParse2) #prints information for sentence two, probably
 
@@ -93,7 +93,7 @@ def score_text():
     confidence = "%.2f" % confidence
 
     # Return JSON:
-    return jsonify(text=text, label=l, confidence=confidence, parsing=formattedParse, strategies=json.dumps(stratDict))
+    return jsonify(text=text, label=l, confidence=confidence, parsing=formattedParse, strategies=stratDict)
 
 
 if __name__ == "__main__":
