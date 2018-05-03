@@ -242,12 +242,15 @@ def get_politeness_strategy_features(document):
 
     return features
 
+#make a dictionary to store all of the words we look to identify. Reason for defining as new variables is
+#to not interfere with the lambda functions, and make minor adjustments to the list of words being searched for
 textStrategies = {'hedges':hedges, 'please':newplease, 'deference':newdeference, 'gratitude':newgratitude, 'apologize':newapologize, 'group identity':newgroupIdentity,
 'first person':newfirstPerson, 'second person':newsecondPerson, 'greeting':newgreeting, 'factuality':newfactuality, 'why':newwhy, 'conj':newconj, 'polar set':polar_set,
 'subjunctive':newsubjunctive, 'indicative':newindicative, 'positive words':positive_words, 'negative words':negative_words}
 
 
-
+#function taken from StackOverflow (https://stackoverflow.com/questions/24222870/find-single-or-multiple-words-in-string)
+#used to match exact word and not subsets of the word
 def findWholeWord(w, string):
     pattern = re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE)
     if pattern.search(string):
@@ -255,9 +258,9 @@ def findWholeWord(w, string):
     else:
         return False
 
-
 # print (textStrategies)
 
+#helper function that checks the invididual words of a sentence with the strategy dictionary
 def sentCheck(sent):
     tracker = {}
     for key, val in textStrategies.items():
@@ -267,11 +270,10 @@ def sentCheck(sent):
             if (findWholeWord(v, sent)):
                 # print (v)
                 tracker[v]=key
-                # print ("memes")
-                # print (tracker) #probably going to overwrite the value
     return tracker
 
+#some code to test to see if the functions were working as intended
 # print (sentCheck('What the fuck is wrong with this code?'))
-#
+
 # print (findWholeWord('jaw-dropping', 'those jaw-dropping seek shall find'))
 # print (findWholeWord('word', 'swordsmith'))

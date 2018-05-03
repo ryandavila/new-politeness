@@ -111,7 +111,10 @@
 stratColor = ['hedges', 'please', 'deference', 'gratitude', 'apologize', 'group identity',
 'first person', 'second person', 'greeting', 'factuality', 'why', 'conj', 'polar set',
 'subjunctive', 'indicative', 'positive words', 'negative words']
+//unused associative array that would assign color to certain groupings of words
 
+/*function to set the fill for a gradient bar that would indicate how polite a certain
+sentiment is */
 function setFill(ele, perc, use_color) {
 
   var color;
@@ -140,6 +143,8 @@ function setFill(ele, perc, use_color) {
     .css('background', 'linear-gradient(to left, ' + color + ' ' + perc + '%,#ffffff ' + perc + '%)');
 }
 
+/* function created with the intent to match the exact string, and solve the
+substring problem */
 function matchExact(r, str) {
    var match = str.match(r);
    return match != null && str == match[0];
@@ -154,15 +159,17 @@ function formatStrat (text, strats) {
   // console.log(key + ",", strats[key]);
   words.push(key); });
   words.forEach(function(word) {
+    var test = "/\\b("+word+")/i"; //need to use \b somehow to make do work
     var reg = new RegExp(word, "i");
+    console.log(test);
     console.log(word);
-    newFormat = newFormat.replace(reg, "<b>"+word+"</b>");
+    newFormat = newFormat.replace(test, "<b>"+word+"</b>");
     console.log(newFormat);
   });
   return newFormat;
   }
 
-
+// unused function to create an html element for the sentiment bar
 function politenessBar() {
   var elem = document.getElementById("bar");
   var placement = (+data.confidence) * elem.style.width;
@@ -200,7 +207,7 @@ $(document).ready(function() {
         } else {
           $("#confidence").html("Algorithm's Confidence: ".concat(data.confidence));
         }
-        var newText = formatStrat(data.text, data.strategies);
+        var newText = formatStrat(data.text, data.stratObj);
         console.log(newText);
         $("#scored-txt").html(newText);
         $('#bar').each(function(i, e){
@@ -215,6 +222,5 @@ $(document).ready(function() {
 });
 
 </script>
-
 </body>
 </html>

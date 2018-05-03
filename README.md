@@ -1,18 +1,15 @@
 Stanford Politeness API
 =======================
 
+#### Adaptation developed for Hajin's study
+
+Working with Version 3.00 linked below, I made adaptations in order to search and mark keywords that are part of word groups specified in strategies.py. Feel free to add more word groups to the strategy dictionary if you would like to identify more words. Integrating this with JavaScript browser rendering for the HTML form is a work in progress.
+
 #### Version 3.00 (released June 2017)
 
+[Base Code / Version](https://github.com/PureMath86/politeness)
+
 In this version, the codebase has been refactored into a package-able state so it can be pushed to PyPi.
-
-#### Version 2.00 (released March 2017)
-
-[Details](https://github.com/meyersbs/politeness/tree/eee3c5f8397c422825d5a76a4e8ff4bbfc17a310)
-
-#### Version 1.01 (released October 2014)
-
-[Details](https://github.com/sudhof/politeness/tree/89506585fbd70afa265c773a68b71cf3e3fd0a64)
-
 
 ### Description
 
@@ -95,16 +92,33 @@ cls.predict(data_dict)
 
 ### Contact
 
+For questions regarding this lab iterations, contact hl934@cornell.edu (Hajin Lim) or rmd252@cornell.edu (Ryan Davila).
+
 For questions regarding versions 3.00 and 2.00, please email bsm9339@rit.edu (Benjamin Meyers) or nm6061@rit.edu (Nuthan Munaiah). Please direct questions regarding the port from Python2 to Python3 to Benjamin Meyers.
 
 For questions regarding the implementation and the theory behind the politeness classifier, please email cristian@cs.cornell.edu (Cristian Danescu-Niculescu-Mizil) or sudhof@stanford.edu (Moritz Sudhof).
 
-# new-politeness
-In order to properly run the program, you need to run a version of StanfordCoreNLP server, and link the ports, which has instructions in the previous part of the readme.
+## Lab Notes & Adaptations
+In order to properly run the program, you need to run a version of StanfordCoreNLP server ([link to version used](https://stanfordnlp.github.io/CoreNLP/history.html)), and link the ports, which has instructions in the previous part of the readme. The command used to start the server while in the directory of the NLP folder is
+
+``` bash
+java -mx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 15000
+```
+
 The default port is 9000. Then in order to run the program, run
 ``` bash
 python3 app.py
 ```
 And then you will be prompted to open the form with a url, and you should be able to input the sentence / request there.
-The in-depth results will be displayed in the terminal, along with part of the values from the process. This is being
-adapted to work on the webpage, with a cleaner display.
+
+The in-depth results can be displayed in the terminal, along with part of the values from the process with use of the commented out print statements. This information is displayed on the webpage. In the future, displaying the information with color codes for different groupings of phrases, as well as a bar that serves as a gradient to indicate the level of politeness is the goal.
+
+### Noted Issues / Struggles
+
+Problem: Working with the JavaScript to render the information appropriately was difficult. One specific instance is when matching the dictionary to the text in browser, if a word appeared as a substring before the specific word in question, the wrong text would be emphasized.
+
+Example) Do they think I know what I am doing? Results in the "i" in "think" being highlighted instead of "I".
+
+Resolution: Regular Expressions. I have code written there that works in certain RegEx testers but not in the browser code. This should be a relatively straightforward fix with some tinkering, but similar bugs may present themselves, as it is difficult to transfer object information in between languages into a browser and I've found out.
+
+This is the main thing I was struggling with as I am writing this, as conveying accurate information is the most important. Beyond this, it is mostly stylistic choices as to how once chooses to display the information for the sentences.

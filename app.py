@@ -60,27 +60,21 @@ def score_text():
     doc = predictionSeg["document"]
     parses = predictionSeg["parses"]
 
-
-    stratDict = (ps.sentCheck(text))
-    #print(parses)
-    initialParse = parses[0]
-    # print (initialParse)
-    # smolParse2 = parses[1]
-    # print (smolParse2) #prints information for sentence two, probably
+    stratDict = (ps.sentCheck(text)) #creates dictionary based on helper in strategies.py
 
     fullParse = parses[0]
-    parsing = fullParse["parses"]
-    # print (parsing) #prints information
+    parsing = fullParse["parses"] #stores parsing information from nltk
+
     formattedParse = str(parsing)
-    formattedParse = formattedParse.replace("),", ") , ")
+    formattedParse = formattedParse.replace("),", ") , ") #stores parsing and then makes the string less cluttered
 
 
-    politeProb = float(doc[0])
-    impoliteProb = float(doc[1])
-    print(politeProb)
-    print(impoliteProb)
+    politeProb = float(doc[0]) #probability of sentiment being polite
+    impoliteProb = float(doc[1]) #inverse
+    # print(politeProb)
+    # print(impoliteProb)
 
-    if politeProb > 0.6:
+    if politeProb > 0.6: #math and conditions preserved from previous
         l = "polite"
         confidence = politeProb
     elif impoliteProb > 0.6:
@@ -93,8 +87,8 @@ def score_text():
     confidence = "%.2f" % confidence
 
     # Return JSON:
-    return jsonify(text=text, label=l, confidence=confidence, parsing=formattedParse, strategies=stratDict)
-
+    return jsonify(text=text, label=l, confidence=confidence, parsing=formattedParse, strategies=json.dumps(stratDict), stratObj=stratDict)
+    #strategies returns the string version of the strategy dictionary, while stratObj returns the Python dictionary (not useful for printing)
 
 if __name__ == "__main__":
     # port = int(os.environ.get("PORT", 8000))
